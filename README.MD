@@ -46,7 +46,7 @@ DATABASE_NAME=<YOUR DATABASE NAME>
    1. Users API
    2. Rooms API
    3. Residents API
-   4. Transactions API (Coming Soon)
+   4. Transactions API
    5. Payment API (Coming Soon)
 3. Owner Role (Coming Soon)
 4. User Role (Coming Soon)

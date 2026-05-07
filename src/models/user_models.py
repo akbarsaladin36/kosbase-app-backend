@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime
-from sqlalchemy.sql import func
 from src.config.database import Base
 
 class User(Base):

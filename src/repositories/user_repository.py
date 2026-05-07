@@ -13,6 +13,10 @@ class UserRepository:
     def get_user_repository(self, username: str) -> Optional[User]:
         user = self.db.query(User).filter(User.username == username).first()
         return user
+    
+    def get_user_by_id_repository(self, user_uuid: str) -> Optional[User]:
+        user = self.db.query(User).filter(User.uuid == user_uuid).first()
+        return user
 
     def create_user_repository(self, user_create_input: dict) -> User:
         user = User(**user_create_input)
