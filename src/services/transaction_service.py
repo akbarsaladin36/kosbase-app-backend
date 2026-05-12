@@ -3,15 +3,17 @@ from datetime import datetime
 from src.repositories.transaction_repository import TransactionRepository
 from src.repositories.room_repository import RoomRepository
 from src.repositories.user_repository import UserRepository
+from src.repositories.payment_repository import PaymentRepository
 from src.inputs.transaction_input import CreateTransactionInput, UpdateTransactionInput
 from src.responses.transaction_response import TransactionResponse, TransactionMessageResponse, TransactionsMessageResponse
 from src.helper.index import generate_code
 
 class TransactionService:
-    def __init__(self, transactionRepository: TransactionRepository, roomRepository: RoomRepository, userRepository: UserRepository):
+    def __init__(self, transactionRepository: TransactionRepository, roomRepository: RoomRepository, userRepository: UserRepository, paymentRepository: PaymentRepository):
         self.transactionRepository = transactionRepository
         self.roomRepository = roomRepository
         self.userRepository = userRepository
+        self.paymentRepository = paymentRepository
 
     def get_transactions_service(self) -> TransactionsMessageResponse:
         transactions = self.transactionRepository.get_transactions_repository()
@@ -108,6 +110,21 @@ class TransactionService:
         create_transaction_setdata["created_by"] = current_user.get("uuid")
         create_transaction_setdata["created_by_username"] = current_user.get("username")
         create_transaction = self.transactionRepository.create_transaction_repository(create_transaction_setdata)
+
+        create_payment_setdata = {
+            "user_uuid": create_transaction.user_uuid,
+            "transaction_code": create_transaction.code,
+            "code": generate_code("PC"),
+            "description": f"Pembayaran dari {create_transaction.description}",
+            "total_price": create_transaction.total_price,
+            "status_cd": "pending",
+            "created_at": datetime.now(),
+            "created_by": current_user.get("uuid"),
+            "created_by_username": current_user.get("username"),
+        }
+
+        self.paymentRepository.create_payment_repository(create_payment_setdata)
+
         validate_create_transaction = TransactionResponse.model_validate(create_transaction)
         return TransactionMessageResponse(
             status_code=status.HTTP_200_OK,
@@ -129,6 +146,27 @@ class TransactionService:
             update_transaction_setdata["updated_by"] = current_user.get("uuid")
             update_transaction_setdata["updated_by_username"] = current_user.get("username")
             update_transaction = self.transactionRepository.update_transaction_repository(transaction, update_transaction_setdata)
+
+            payments = self.paymentRepository.get_payment_by_transaction_repository(transaction.code)
+
+            if payments is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="A payment data is not found!"
+                )
+
+            update_payment_setdata = {
+                "status_cd": update_transaction.status_cd,
+                "updated_at": datetime.now(),
+                "updated_by": current_user.get("uuid"),
+                "updated_by_username": current_user.get("username"), 
+            }
+
+            for payment in payments:
+                self.paymentRepository.update_payment_repository(payment, update_payment_setdata)
+
+
+
             validate_update_transaction = TransactionResponse.model_validate(update_transaction)
             return TransactionMessageResponse(
                 status_code=status.HTTP_200_OK,

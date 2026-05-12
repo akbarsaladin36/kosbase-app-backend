@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from src.repositories.transaction_repository import TransactionRepository
 from src.repositories.room_repository import RoomRepository
 from src.repositories.user_repository import UserRepository
+from src.repositories.payment_repository import PaymentRepository
 from src.services.transaction_service import TransactionService
 from src.config.database import get_db
 from src.inputs.transaction_input import CreateTransactionInput, UpdateTransactionInput
@@ -11,7 +12,8 @@ def get_transaction_service(db: Session = Depends(get_db)) -> TransactionService
     transactionRepository = TransactionRepository(db)
     roomRepository = RoomRepository(db)
     userRepository = UserRepository(db)
-    return TransactionService(transactionRepository, roomRepository, userRepository)
+    paymentRepository = PaymentRepository(db)
+    return TransactionService(transactionRepository, roomRepository, userRepository, paymentRepository)
 
 class TransactionController:
     @staticmethod
