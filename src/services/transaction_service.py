@@ -165,8 +165,6 @@ class TransactionService:
             for payment in payments:
                 self.paymentRepository.update_payment_repository(payment, update_payment_setdata)
 
-
-
             validate_update_transaction = TransactionResponse.model_validate(update_transaction)
             return TransactionMessageResponse(
                 status_code=status.HTTP_200_OK,
