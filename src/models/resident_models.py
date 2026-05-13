@@ -10,6 +10,7 @@ class Resident(Base):
     room_code = Column(String(150), nullable=True)
     uuid = Column(String(150), nullable=True)
     full_name = Column(String(200), nullable=True)
+    email = Column(String(150), nullable=True)
     address = Column(Text, nullable=True)
     phone_number = Column(String(30), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=True)

@@ -10,7 +10,9 @@ class Settings(BaseSettings):
     jwt_secret_key: str
     jwt_algorithm: str
     jwt_access_expire_time: int
-
+    mayar_base_url: str
+    mayar_webhook_token: str
+    mayar_api_key: str
 
     class Config:
         env_file = '.env'

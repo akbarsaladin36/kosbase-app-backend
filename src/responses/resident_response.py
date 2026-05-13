@@ -6,6 +6,7 @@ class CreateResidentResponse(BaseModel):
     room_code: Optional[str] = None
     owner_uuid: Optional[str] = None
     full_name: Optional[str] = None
+    email: Optional[str] = None
     address: Optional[str] = None
     phone_number: Optional[str] = None
     created_at: Optional[datetime] = None

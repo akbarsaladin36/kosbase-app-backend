@@ -30,7 +30,7 @@ def user_role_required(*allowed_roles: str):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=f"Invalid role access! {user_role} not have permission!"
-                       f"Role can access={', '.join(allowed_roles)}"
+                       f" Role can access = {', '.join(allowed_roles)}"
             )
 
         return current_user 

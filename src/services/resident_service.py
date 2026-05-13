@@ -69,6 +69,7 @@ class ResidentService:
             resident_set_data = payload.model_dump()
             resident_set_data["owner_uuid"] = current_user.get("uuid")
             resident_set_data["uuid"] = generate_uuid()
+            resident_set_data["email"] = f"{resident_set_data["email"]}@kosbase.com"
             resident_set_data["created_at"] = datetime.now()
             resident_set_data["created_by"] = current_user.get("uuid")
             resident_set_data["created_by_username"] = current_user.get("username")
