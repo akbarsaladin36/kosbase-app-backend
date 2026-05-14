@@ -5,3 +5,7 @@ pydantic_settings==2.14.1
 python_bcrypt==0.3.2
 python_jose==3.5.0
 SQLAlchemy==2.0.49
+pymysql
+a2wsgi
+uvicorn
+python-dotenv
