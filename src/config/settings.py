@@ -1,10 +1,13 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 from pathlib import Path
+import os
 
+APP_ENV = os.getenv('APP_ENV', 'development')
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 class Settings(BaseSettings):
+    app_env: str
     database_host: str = 'localhost'
     database_port: int = 3306
     database_name: str
@@ -18,7 +21,7 @@ class Settings(BaseSettings):
     mayar_api_key: str
 
     class Config:
-        env_file = str(ROOT_DIR / '.env')
+        env_file = str(ROOT_DIR / '.env') if APP_ENV == "development" else None
         env_file_encoding = 'utf-8'
 
 @lru_cache
