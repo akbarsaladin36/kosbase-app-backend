@@ -1,5 +1,8 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 class Settings(BaseSettings):
     database_host: str = 'localhost'
@@ -15,7 +18,7 @@ class Settings(BaseSettings):
     mayar_api_key: str
 
     class Config:
-        env_file = '.env'
+        env_file = str(ROOT_DIR / '.env')
         env_file_encoding = 'utf-8'
 
 @lru_cache
