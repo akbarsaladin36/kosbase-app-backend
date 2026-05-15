@@ -1,15 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from fastapi.openapi.utils import get_openapi
 from src.config.database import engine, Base
 from src.routes.index import router
 
-Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
 
 app = FastAPI(
     title="Kosbase App REST API",
     description="A REST API for Kosbase App",
     version="1.0.0",
+    lifespan=lifespan,
     swagger_ui_parameters={"persistAuthorization": True}
 )
 
